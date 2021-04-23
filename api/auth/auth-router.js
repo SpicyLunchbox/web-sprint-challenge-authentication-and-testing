@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const {jwtSecret} = require("../../config/secret.js");
 const Users = require('./users-model.js');
 const checkCredentials = require('../middleware/check-credentials-middleware');
-const { json } = require('express');
+
 
 router.post('/register', checkCredentials, (req, res, next) => {
   let user = req.body;
@@ -49,12 +49,12 @@ router.post('/register', checkCredentials, (req, res, next) => {
 router.post('/login', checkCredentials, (req, res, next) => {
   let { username, password } = req.body;
 
-  Users.findById({username})
+  Users.findBy({username})
     .then(([user]) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = makeToken(user)
 
-        res.status(200)json({
+        res.status(200).json({
           message: `Welcome ${user.username}`,
           token
         })
